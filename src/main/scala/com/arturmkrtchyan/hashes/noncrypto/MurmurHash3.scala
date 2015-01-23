@@ -7,6 +7,7 @@ package com.arturmkrtchyan.hashes.noncrypto
 //
 
 import java.lang.Integer.{ rotateLeft => rotl }
+import java.lang.Long.{ rotateLeft => rotl64 }
 
 private[noncrypto] class MurmurHash3_x86_32 extends HashFunction {
 
@@ -101,11 +102,23 @@ private[noncrypto] class MurmurHash3_x64_128 extends HashFunction {
       var key1 = readLong(data, i)
       var key2 = readLong(data, i + 8)
 
+      // FIXME extract to small functions
+      key1 *= c1; key1  = rotl64(key1,31); key1 *= c2; hash1 ^= key1
 
+      hash1 = rotl64(hash1,27); hash1 += hash2; hash1 = hash1 * 5 + 0x52dce729
+
+      key2 *= c2; key2  = rotl64(key2,33); key2 *= c1; hash2 ^= key2
+
+      hash2 = rotl64(hash2,31); hash2 += hash1; hash2 = hash2 * 5 + 0x38495ab5
 
       i += blockSize
       length -= blockSize
     }
+
+    // TODO handle tail
+
+    var k1 = 0L
+    var k2 = 0L
 
     0
   }
