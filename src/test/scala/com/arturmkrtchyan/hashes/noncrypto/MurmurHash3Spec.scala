@@ -20,7 +20,7 @@ object MurmurHash3Spec extends Specification {
         .map(byte => byte._1)
 
       val str2hash = new String(bytes2hash)
-      s"be equal guava murmur3 given seed: $index, hash-string: $str2hash" in {
+      s"be equal to guava murmur3 given [seed: $index, str: $str2hash]" in {
         val guavaHash = Hashing.murmur3_32(index).hashBytes(bytes2hash).asInt
         val myHash = MurmurHash3.hash32(bytes2hash, index)
 
